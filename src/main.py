@@ -6,7 +6,7 @@ from starlette.responses import Response
 from fastapi.responses import ORJSONResponse
 
 from src.api.v1 import files, ping, users
-from core.config import app_settings, BLACK_LIST
+from src.core.config import app_settings, BLACK_LIST
 
 
 app = FastAPI(

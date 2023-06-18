@@ -52,7 +52,7 @@ async def authentication(db: AsyncSession = Depends(get_session), obj: UserGet =
         response['name'] = 'Not correct username.'
         return response
 
-    new_token = secrets.token_hex(100)
+    new_token = secrets.token_hex(10)
     await user_crud.update(db=db, name=user.name, token=new_token)
     response['token'] = new_token
 

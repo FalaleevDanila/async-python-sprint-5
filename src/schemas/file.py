@@ -6,12 +6,10 @@ from pydantic import BaseModel
 class FileBase(BaseModel):
     path: str
     size: int
-    owner: int
 
 
 class FileCreate(FileBase):
     name: str
-    owner: int
 
 
 class FileInDBBase(FileBase):

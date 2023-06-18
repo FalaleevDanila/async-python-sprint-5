@@ -47,9 +47,7 @@ class RepositoryDB(Repository, Generic[ModelType, CreateSchemaType, UpdateSchema
     ) -> ModelType:
 
         obj_in_data = jsonable_encoder(obj_in)
-        data_without_none = {
-            key: value for key, value in obj_in_data.items() if value is not None
-        }
+        data_without_none = obj_in_data.dict(exclude_none=True)
 
         await db.execute(
             update(self._model).
@@ -59,9 +57,6 @@ class RepositoryDB(Repository, Generic[ModelType, CreateSchemaType, UpdateSchema
         await db.commit()
 
         return db_obj
-
-    async def delete(self, db: AsyncSession, *, id: int) -> ModelType:
-        pass
 
 
 class FileDB(RepositoryDB[ModelType, CreateSchemaType, UpdateSchemaType]):

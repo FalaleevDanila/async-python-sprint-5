@@ -1,5 +1,6 @@
 import os
 import shutil
+from aiofile import async_open
 from typing import Any, AnyStr, Dict, List
 from starlette.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -18,24 +19,20 @@ router = APIRouter()
 
 @router.post('/upload', response_model=Dict, status_code=status.HTTP_201_CREATED)
 async def upload(
-    db: AsyncSession = Depends(get_session), file: UploadFile = File(), user: bool = Depends(verify_token)
+    db: AsyncSession = Depends(get_session), file: UploadFile = File(...), user: bool = Depends(verify_token)
 ) -> Any:
-
     name = file.filename
     _path = os.path.join(DEFAULT_FILES_FOLDER, name)
 
     if not os.path.isdir(DEFAULT_FILES_FOLDER):
         os.mkdir(DEFAULT_FILES_FOLDER)
-    with open(_path, 'wb') as f:
+    async with async_open(_path, 'wb') as f:
         shutil.copyfileobj(file.file, f)
 
-    obj_in = FileCreate(path=_path, name=name, size=file.size, owner=user.id)
-
-    file_exists = await file_crud.get(db=db, name=name)
-    if file_exists:
-        await file_crud.delete(db=db, name=name)
+    obj_in = FileCreate(path=_path, name=name, size=file.size)
 
     created_file = await file_crud.create(db=db, obj_in=obj_in)
+
     response = {
         "id": created_file.id,
         "name": created_file.name,
