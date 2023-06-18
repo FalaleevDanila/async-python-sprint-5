@@ -1,6 +1,6 @@
 import os
 import shutil
-from aiofile import async_open
+import aiofiles
 from typing import Any, AnyStr, Dict, List
 from starlette.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -26,12 +26,19 @@ async def upload(
 
     if not os.path.isdir(DEFAULT_FILES_FOLDER):
         os.mkdir(DEFAULT_FILES_FOLDER)
-    async with async_open(_path, 'wb') as f:
-        shutil.copyfileobj(file.file, f)
 
-    obj_in = FileCreate(path=_path, name=name, size=file.size)
+    size = 0
+    async with aiofiles.open(_path, 'wb') as f:
+        while content := await file.file.read(2 ** 16):
+            size += len(content)
+            await f.write(content)
 
-    created_file = await file_crud.create(db=db, obj_in=obj_in)
+    obj_in = FileCreate(path=_path, name=name, size=file.size, owner=user.id)
+    try:
+        created_file = await file_crud.create(db=db, obj_in=obj_in)
+    except Exception:
+        await file_crud.delete(db=db, name=name)
+        created_file = await file_crud.create(db=db, obj_in=obj_in)
 
     response = {
         "id": created_file.id,

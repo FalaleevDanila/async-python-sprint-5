@@ -36,5 +36,21 @@ def test_files_download():
     assert result.get("detail") == "Unauthorized"
 
 
+def test_work():
+    response = client.post(app.url_path_for('register'), json={"name": "test1", "password": "123"})
+    assert response.status_code == HTTPStatus.CREATED
+
+    response = client.post(app.url_path_for('authentication'), json={"name": "test1", "password": "123"})
+    assert response.status_code == HTTPStatus.OK
+
+
+def test_get_list_file_work(auth_async_client):
+    response = client.get(app.url_path_for('info'), headers=auth_async_client.headers)
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    result = response.json()
+    assert len(result) == 1
+    assert result.get("detail") == "Unauthorized"
+
+
 
 

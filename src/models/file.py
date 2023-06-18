@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import Boolean, Column, DateTime, Integer, String, func
+from sqlalchemy import Boolean, Column, DateTime, Integer, String, func, ForeignKey
 from sqlalchemy_utils import UUIDType
 
 from src.db.db import Base
@@ -14,3 +14,4 @@ class File(Base):
     path = Column(String(100), unique=True, nullable=False)
     size = Column(Integer)
     is_downloadable = Column(Boolean, default=True)
+    owner = Column(ForeignKey('user.id'), nullable=False)
