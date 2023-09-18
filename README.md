@@ -1,4 +1,6 @@
 # Проектное задание пятого спринта
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FFalaleevDanila%2Fasync-python-sprint-5.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FFalaleevDanila%2Fasync-python-sprint-5?ref=badge_shield)
+
 
 Вам необходимо спроектировать и разработать файловое хранилище, которое позволяет хранить различные типы файлов — документы, фотографии, другие данные.
 
@@ -314,3 +316,7 @@
 2. Используйте готовые библиотеки и пакеты, например, для авторизации. Для поиска можно использовать [сервис openbase](https://openbase.com/categories/python), [PyPi](https://pypi.org/) или на [GitHub](https://github.com/search?).
 3. Используйте **in-memory-db** для кэширования данных.
 4. Для скачивания файлов можно использовать возможности сервера отдачи статики, для хранения — облачное объектное хранилище (s3).
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FFalaleevDanila%2Fasync-python-sprint-5.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FFalaleevDanila%2Fasync-python-sprint-5?ref=badge_large)
